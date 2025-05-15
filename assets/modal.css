@@ -67,7 +67,7 @@
             flex-direction: column;
             padding: 20px;
     }
-    .custom-modal-content .modal-image {
+    .custom-modal-content.with-image .modal-image {
         width: 100%;
             height: 100%;
             margin-bottom: 20px;
@@ -76,7 +76,11 @@
         width: 100%;
         margin: 10px auto;
     }
-        .custom-modal-content .modal-image img.modal-img {
+        .custom-modal-content.with-image .modal-text {
+            width: 100%;
+            margin: 10px auto;
+        }
+        .custom-modal-content.with-image .modal-image img.modal-img {
         width: 100%;
             height: 100%;
             aspect-ratio: 6/3;
