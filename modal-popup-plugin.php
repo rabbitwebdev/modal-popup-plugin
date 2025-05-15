@@ -48,12 +48,20 @@ add_action('wp_footer', function() {
     $modal_add_image = get_field('modal_add_image', 'option');
     $modal_content = get_field('popup_content', 'option');
     $modal_image = get_field('modal_image', 'option');
+    $bg_color = get_field('modal_bg_color', 'option') ?: '#ffffff';
+     $overlay_color = get_field('modal_overlay_color', 'option') ?: 'rgba(0,0,0,0.6)';
     if ($modal_add_image && $modal_image) {
         $modal_img_content .= '<img src="' . esc_url($modal_image['url']) . '" class="modal-img" alt="' . esc_attr($modal_image['alt']) . '">';
     }
     ?>
+     <style>
+        .custom-modal { background-color: <?php echo $overlay_color; ?>; }
+        .custom-modal-content {
+            background-color: <?php echo $bg_color; ?>;
+        }
+    </style>
     <div id="custom-modal" class="custom-modal" style="display:none;">
-        <div class="custom-modal-content">
+        <div class="custom-modal-content <?php echo $modal_add_image ? 'with-image' : ''; ?>">
             <span class="close-button">&times;</span>
             <?php if ($modal_add_image && $modal_image) : ?>
                 <div class="modal-image">
