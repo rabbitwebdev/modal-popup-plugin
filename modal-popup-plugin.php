@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Modal Popup Plugin
  * Description: Creates a customizable modal popup using ACF fields.
- * Version: 2.0
+ * Version: 2.9
  * Author: P York
  */
 
@@ -62,8 +62,8 @@ add_action('wp_footer', function() {
             background-color: <?php echo $bg_color; ?>;
         }
         @media screen and (max-width: 768px) {
-            .custom-modal-content.with-image .modal-image img {
-               object-fit: <?php echo $modal_mobile_image_fit; ?>;
+            .custom-modal-content.with-image .modal-image img.modal-img {
+               object-fit: <?php echo $modal_mobile_image_fit; ?> !important;
             }
             
         }
