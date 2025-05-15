@@ -49,6 +49,7 @@ add_action('wp_footer', function() {
     $modal_content = get_field('popup_content', 'option');
     $modal_image = get_field('modal_image', 'option');
     $modal_button = get_field('modal_button', 'option');
+    $modal_mobile_image_fit = get_field('modal_mobile_image_fit', 'option');
     $bg_color = get_field('modal_bg_color', 'option') ?: '#ffffff';
      $overlay_color = get_field('modal_overlay_color', 'option') ?: 'rgba(0,0,0,0.6)';
     if ($modal_add_image && $modal_image) {
@@ -59,6 +60,12 @@ add_action('wp_footer', function() {
         .custom-modal { background-color: <?php echo $overlay_color; ?>; }
         .custom-modal-content {
             background-color: <?php echo $bg_color; ?>;
+        }
+        @media screen and (max-width: 768px) {
+            .custom-modal-content.with-image .modal-image img {
+               object-fit: <?php echo $modal_mobile_image_fit; ?>;
+            }
+            
         }
     </style>
     <div id="custom-modal" class="custom-modal" style="display:none;">
