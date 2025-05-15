@@ -60,7 +60,9 @@ add_action('wp_footer', function() {
                     <?php echo $modal_img_content; ?>
                 </div>
             <?php endif; ?>
-            <?php echo $modal_content; ?>
+            <div class="modal-text">
+                <?php echo $modal_content; ?>
+            </div>
         </div>
     </div>
     <?php
