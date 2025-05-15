@@ -49,7 +49,7 @@ add_action('wp_footer', function() {
     $modal_content = get_field('popup_content', 'option');
     $modal_image = get_field('modal_image', 'option');
     if ($modal_add_image && $modal_image) {
-        $modal_img_content .= '<img src="' . esc_url($modal_image['url']) . '" alt="' . esc_attr($modal_image['alt']) . '">';
+        $modal_img_content .= '<img src="' . esc_url($modal_image['url']) . '" class="modal-img" alt="' . esc_attr($modal_image['alt']) . '">';
     }
     ?>
     <div id="custom-modal" class="custom-modal" style="display:none;">
