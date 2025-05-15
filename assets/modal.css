@@ -85,9 +85,9 @@ width: 55%;
         padding-top: 130px;
     }
     .custom-modal-content {
-        width: 90%;
+        width: 80%;
             flex-direction: column;
-            padding: 20px;
+            padding: 10px;
     }
     .custom-modal-content.with-image .modal-image {
         width: 100%;
@@ -108,5 +108,10 @@ width: 55%;
             aspect-ratio: 6/3;
             object-fit: cover;
         }
+
+                .close-button {
+                    right: -5px;
+                        top: -5px;
+                }
     
 }
