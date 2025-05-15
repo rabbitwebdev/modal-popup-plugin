@@ -45,12 +45,21 @@ add_action('wp_footer', function() {
     $selected_pages = get_field('show_on_pages', 'option');
 
     if ($selected_pages && !in_array($post->ID, array_column($selected_pages, 'ID'))) return;
-
+    $modal_add_image = get_field('modal_add_image', 'option');
     $modal_content = get_field('popup_content', 'option');
+    $modal_image = get_field('modal_image', 'option');
+    if ($modal_add_image && $modal_image) {
+        $modal_img_content .= '<img src="' . esc_url($modal_image['url']) . '" alt="' . esc_attr($modal_image['alt']) . '">';
+    }
     ?>
     <div id="custom-modal" class="custom-modal" style="display:none;">
         <div class="custom-modal-content">
             <span class="close-button">&times;</span>
+            <?php if ($modal_add_image && $modal_image) : ?>
+                <div class="modal-image">
+                    <?php echo $modal_img_content; ?>
+                </div>
+            <?php endif; ?>
             <?php echo $modal_content; ?>
         </div>
     </div>
