@@ -48,6 +48,7 @@ add_action('wp_footer', function() {
     $modal_add_image = get_field('modal_add_image', 'option');
     $modal_content = get_field('popup_content', 'option');
     $modal_image = get_field('modal_image', 'option');
+    $modal_button = get_field('modal_button', 'option');
     $bg_color = get_field('modal_bg_color', 'option') ?: '#ffffff';
      $overlay_color = get_field('modal_overlay_color', 'option') ?: 'rgba(0,0,0,0.6)';
     if ($modal_add_image && $modal_image) {
@@ -70,6 +71,12 @@ add_action('wp_footer', function() {
             <?php endif; ?>
             <div class="modal-text">
                 <?php echo $modal_content; ?>
+
+                <?php if ($modal_button) : ?>
+                    <a href="<?php echo esc_url($modal_button['url']); ?>" class="modal-button" target="<?php echo esc_attr($modal_button['target']); ?>">
+                        <?php echo esc_html($modal_button['title']); ?>
+                    </a>
+                <?php endif; ?> 
             </div>
         </div>
     </div>
