@@ -61,6 +61,25 @@ width: 55%;
         color: black;
         box-shadow: 1px 1px 1px 1px #181818ad;
 }
+.modal-button {
+    width: fit-content;
+    padding: 10px 25px;
+    position: relative;
+    display: block;
+    background-color: #fff;
+    color: black;
+    text-decoration: none;
+    text-decoration-thickness: auto;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 800;
+    transition: all 0.3s ease;
+}
+.modal-button:hover {
+    background-color: #181818;
+    color: white;
+    transition: all 0.3s ease;
+}
 @media screen and (max-width: 768px) {
     .custom-modal {
         padding-top: 130px;
