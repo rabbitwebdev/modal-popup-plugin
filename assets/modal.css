@@ -50,11 +50,16 @@
     }
     .custom-modal-content .modal-image {
         width: 100%;
-        height: 100%;
+        height: 300px;
     }
     .custom-modal-content .modal-text {
         width: 100%;
         margin: auto;
     }
+        .custom-modal-content .modal-image img.modal-img {
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 6/5;
+        }
     
 }
