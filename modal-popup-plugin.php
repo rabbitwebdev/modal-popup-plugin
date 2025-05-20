@@ -43,7 +43,6 @@ add_action('wp_footer', function() {
    
 
     global $post;
-    $modal_enable_page = get_field('modal_enable', $post->ID);
 
 
 
@@ -124,21 +123,29 @@ add_action('wp_footer', function() {
     </div>
     <?php
 
-    $target_modal_pages = get_field('target_modal_page');
-if( $target_modal_pages ): ?>
-   
-    <?php foreach( $target_modal_pages as $target_modal_page ): 
-       
-        $title = get_the_title( $target_modal_page->ID );
-        $the_modal_content = get_field( 'the_modal_content', $target_modal_page->ID );
-        ?>
-          <div id="custom-modal" class="custom-modal" style="display:none;">
-            <a href="#"><?php echo esc_html( $title ); ?></a>
-            <span>A custom field from this post: <?php echo esc_html( $the_modal_content ); ?></span>
-    </div>
-    <?php endforeach; ?>
-   
-<?php endif; 
+  
 
    
+});
+
+// Add ACF fields
+add_action('wp_footer', function() {
+    global $post;
+    if (!function_exists('get_field')) return;
+    $modal_enable_page = get_field('modal_enable', $post->ID);
+    if ($modal_enable_page) {
+        $target_modal_pages = get_field('target_modal_page');
+        if ($target_modal_pages) {
+            foreach ($target_modal_pages as $target_modal_page) {
+                $title = get_the_title($target_modal_page->ID);
+                $the_modal_content = get_field('the_modal_content', $target_modal_page->ID);
+                ?>
+                <div id="custom-modal" class="custom-modal" style="display:none;">
+                    <a href="#"><?php echo esc_html($title); ?></a>
+                    <span>A custom field from this post: <?php echo esc_html($the_modal_content); ?></span>
+                </div>
+                <?php
+            }
+        }
+    }
 });
