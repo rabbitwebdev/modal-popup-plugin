@@ -13,15 +13,20 @@
     background-color: #fff;
     margin: auto;
     padding: 20px;
-    width: 80%;
     border-radius: 8px;
     position: relative;
     display: flex;
-        justify-content: space-between;
-        align-items: center;
+    justify-content: space-between;
+    align-items: center;
+}
+.custom-modal-content.modal-width-sm {
+    width: 45%;
 }
 .custom-modal-content.modal-width-md {
     width: 60%;
+}
+.custom-modal-content.modal-width-lg {
+    width: 80%;
 }
 
 .custom-modal-content.with-image .modal-image {
