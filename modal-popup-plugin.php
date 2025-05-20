@@ -38,7 +38,7 @@ if (function_exists('acf_add_options_page')) {
 
 // Display Modal
 add_action('wp_footer', function() {
-    if (!function_exists('get_field')) return;
+     if (!function_exists('get_field')) return;
    
 
     global $post;
@@ -95,12 +95,7 @@ add_action('wp_footer', function() {
         .custom-modal-content {
             background-color: <?php echo $bg_color; ?>;
         }
-        @media screen and (max-width: 768px) {
-            .custom-modal-content.with-image .modal-image img.modal-img {
-               object-fit: <?php echo $modal_mobile_image_fit; ?> !important;
-            }
-            
-        }
+      
     </style>
     <div id="custom-modal" class="custom-modal" style="display:none;">
         <div class="custom-modal-content modal-width-<?php echo $pop_modal_width ; ?> <?php echo $modal_add_image ? 'with-image' : ''; ?>">
