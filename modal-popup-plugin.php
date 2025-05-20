@@ -16,6 +16,11 @@ add_action('wp_enqueue_scripts', function() {
     // Send ACF fields to JS
     if (function_exists('get_field')) {
         $popup_data = [
+            global $post;
+            'enabled' => get_field('modal_enable', $post->ID),
+            'trigger' => get_field('pop_trigger_type', $post->ID),
+            'delay'   => get_field('trigger_delay', $post->ID),
+            'scroll'  => get_field('scroll_percentage', $post->ID),
             'enabled' => get_field('enable_modal', 'option'),
             'trigger' => get_field('popup_trigger', 'option'),
             'delay'   => get_field('popup_delay', 'option'),
@@ -42,6 +47,12 @@ add_action('wp_footer', function() {
    
 
     global $post;
+    $modal_enable_page = get_field('modal_enable', $post->ID);
+    $target_modal_page = get_field('target_modal_page', $post->ID);
+    $the_modal_content = get_field('the_modal_content', $post->ID);
+
+
+
      $global_enabled = get_field('enable_modal', 'option');
     $global_pages = get_field('show_on_pages', 'option');
     $modals = get_field('page_per_modals', 'option');
@@ -117,4 +128,14 @@ add_action('wp_footer', function() {
         </div>
     </div>
     <?php
+
+    if ($modal_enable_page && $target_modal_page) {
+
+        foreach ($target_modal_page as $page) {
+            if ($page['ID'] == $post->ID) {
+               echo 'poooo';
+            }
+        }
+
+    }
 });
