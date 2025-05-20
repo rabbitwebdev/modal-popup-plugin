@@ -49,6 +49,7 @@ add_action('wp_footer', function() {
     $modal_content = get_field('popup_content', 'option');
     $modal_image = get_field('modal_image', 'option');
     $modal_button = get_field('modal_button', 'option');
+    $pop_modal_width = get_field('pop_modal_width', 'option');
     $modal_mobile_image_fit = get_field('modal_mobile_image_fit', 'option');
     $bg_color = get_field('modal_bg_color', 'option') ?: '#ffffff';
      $overlay_color = get_field('modal_overlay_color', 'option') ?: 'rgba(0,0,0,0.6)';
@@ -69,7 +70,7 @@ add_action('wp_footer', function() {
         }
     </style>
     <div id="custom-modal" class="custom-modal" style="display:none;">
-        <div class="custom-modal-content <?php echo $modal_add_image ? 'with-image' : ''; ?>">
+        <div class="custom-modal-content modal-width-<?php echo $pop_modal_width ; ?> <?php echo $modal_add_image ? 'with-image' : ''; ?>">
             <span class="close-button">&times;</span>
             <?php if ($modal_add_image && $modal_image) : ?>
                 <div class="modal-image">

@@ -20,6 +20,9 @@
         justify-content: space-between;
         align-items: center;
 }
+.custom-modal-content.modal-width-md {
+    width: 60%;
+}
 
 .custom-modal-content.with-image .modal-image {
     width: 40%;
