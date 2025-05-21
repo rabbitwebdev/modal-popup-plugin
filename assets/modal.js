@@ -29,10 +29,7 @@ jQuery(document).ready(function($) {
         if (!modal.is(":visible")) modal.fadeIn();
     }
 
-    $('.close-button').on('click', function() {
-        modal.fadeOut();
-        setCookie("modalDismissed", "true", 2); // Cookie expires in 2 days
-    });
+  
 
     switch (trigger) {
         case 'time':
@@ -56,4 +53,10 @@ jQuery(document).ready(function($) {
             });
             break;
     }
+    
+     // Close modal + set cookie
+    $('.close-button').on('click', function() {
+        $('#custom-modal').fadeOut();
+        setCookie("modalDismissed", "true", 2); // Cookie lasts 2 days
+    });
 });

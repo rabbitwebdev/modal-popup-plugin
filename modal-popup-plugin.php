@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Modal Popup Plugin
  * Description: Creates a customizable modal popup using ACF fields.
- * Version: 2.9
+ * Version: 3.0
  * Author: P York
  */
 
@@ -12,16 +12,43 @@ if (!defined('ABSPATH')) exit;
 add_action('wp_enqueue_scripts', function() {
     wp_enqueue_style('modal-popup-style', plugin_dir_url(__FILE__) . 'assets/modal.css');
     wp_enqueue_script('modal-popup-script', plugin_dir_url(__FILE__) . 'assets/modal.js', ['jquery'], null, true);
-
+ if (function_exists('get_field')) {
     // Send ACF fields to JS
-    if (function_exists('get_field')) {
-        $popup_data = [
-            global $post;
-            'enabled' => get_field('enable_modal', 'option'),
-            'trigger' => get_field('popup_trigger', 'option'),
-            'delay'   => get_field('popup_delay', 'option'),
-            'scroll'  => get_field('popup_scroll_percentage', 'option'),
-        ];
+    $trigger_type = get_field('popup_trigger', 'option');
+$trigger_delay = get_field('popup_delay', 'option');
+$scroll_percent = get_field('popup_scroll_percentage', 'option');
+
+// Try per-post modal trigger override
+if (is_singular()) {
+    global $post;
+    $modals = get_posts([
+        'post_type' => 'pop-modal',
+        'posts_per_page' => -1,
+        'post_status' => 'publish',
+    ]);
+
+    foreach ($modals as $modal_post) {
+        $target_pages = get_field('target_modal_page', $modal_post->ID);
+
+        if ($target_pages) {
+            $page_ids = is_array($target_pages) ? wp_list_pluck($target_pages, 'ID') : [$target_pages->ID];
+            if (in_array($post->ID, $page_ids)) {
+                $trigger_type = get_field('pop_trigger_type', $modal_post->ID) ?: $trigger_type;
+                $trigger_delay = get_field('popup_delay', $modal_post->ID) ?: $trigger_delay;
+                $scroll_percent = get_field('popup_scroll_percentage', $modal_post->ID) ?: $scroll_percent;
+                break;
+            }
+        }
+    }
+}
+
+$popup_data = [
+    'enabled' => get_field('enable_modal', 'option'),
+    'trigger' => $trigger_type,
+    'delay'   => $trigger_delay,
+    'scroll'  => $scroll_percent,
+];
+
         wp_localize_script('modal-popup-script', 'popupOptions', $popup_data);
     }
 });
@@ -41,57 +68,92 @@ if (function_exists('acf_add_options_page')) {
 add_action('wp_footer', function() {
      if (!function_exists('get_field')) return;
    
-
-    global $post;
-
-
-
-
-     $global_enabled = get_field('enable_modal', 'option');
-    $global_pages = get_field('show_on_pages', 'option');
-    $modals = get_field('page_per_modals', 'option');
- $global_content = get_field('popup_content', 'option');
-     $modal_content = '';
+     global $post;
+    if (!is_singular() || !$post instanceof WP_Post) return;
+    
+     
+ 
+     $modal = null;
+    $modal_content = '';
+    $modal_img_content = '';
+    $modal_button = '';
+    $mm_image_fit = '';
     $bg_color = '#ffffff';
     $overlay_color = 'rgba(0,0,0,0.6)';
+    $modal_width = 'md';
     $show = false;
 
-     if ($modals) {
-        foreach ($modals as $modal) {
-            if ($modal['target_page']['ID'] == $post->ID) {
-                $modal_content = $modal['modal_content'];
-                $bg_color = $modal['modal_bg_color'] ?: $bg_color;
-                $overlay_color = $modal['modal_overlay_color'] ?: $overlay_color;
-                $pop_modal_width = $modal['pop_modal_width'];
-                $modal_image = $modal['modal_image'];
-                $modal_add_image = $modal['modal_add_image'];
-                 if ($modal_add_image && $modal_image) {
-        $modal_img_content .= '<img src="' . esc_url($modal_image['url']) . '" class="modal-img" alt="' . esc_attr($modal_image['alt']) . '">';
-    }
-                $show = true;
-                break;
+    // STEP 1: Check for matching page_modal post
+    $modals = get_posts([
+        'post_type' => 'pop-modal',
+        'posts_per_page' => -1,
+        'post_status' => 'publish',
+    ]);
+   
+
+  
+   
+    
+    
+    
+    if ($modals) {
+        foreach ($modals as $modal_post) {
+            $target_pages = get_field('target_modal_page', $modal_post->ID); // assuming it's a post object field (can be multiple)
+
+            if ($target_pages) {
+                $page_ids = is_array($target_pages) ? wp_list_pluck($target_pages, 'ID') : [$target_pages->ID];
+
+                if (in_array($post->ID, $page_ids)) {
+                    $modal = $modal_post;
+                    break; // found one, stop loop
+                }
             }
         }
     }
 
-      if (!$show && $global_enabled && is_array($global_pages)) {
-        if (in_array($post->ID, array_column($global_pages, 'ID'))) {
-            $modal_content = $global_content;
-            $modal_add_image = get_field('modal_add_image', 'option');
-               $modal_image = get_field('modal_image', 'option');
-    $modal_button = get_field('modal_button', 'option');
-      $modal_mobile_image_fit = get_field('modal_mobile_image_fit', 'option');
-            $bg_color = get_field('modal_bg_color', 'option') ?: $bg_color;
-            $overlay_color = get_field('modal_overlay_color', 'option') ?: $overlay_color;
-             $pop_modal_width = get_field('pop_modal_width', 'option');
-            if ($modal_add_image && $modal_image) {
+    if ($modal) {
+        $modal_content = get_field('the_modal_content', $modal->ID);
+         $modal_add_image = get_field('modal_add_image', $modal->ID);
+         $mm_image_fit = get_field('modal_mobile_image_fit', $modal->ID);
+         $modal_image = get_field('modal_image', $modal->ID);
+         $modal_button = get_field('modal_button', $modal->ID);
+         $modal_button_color = get_field('modal_button_color', $modal->ID);
+        $bg_color = get_field('modal_bg_color', $modal->ID) ?: $bg_color;
+        $overlay_color = get_field('modal_overlay_color', $modal->ID) ?: $overlay_color;
+        $modal_width = get_field('modal_width', $modal->ID) ?: $modal_width;
+           if ($modal_add_image && $modal_image) {
         $modal_img_content .= '<img src="' . esc_url($modal_image['url']) . '" class="modal-img" alt="' . esc_attr($modal_image['alt']) . '">';
     }
-            $show = true;
+        $show = true;
+    }
+    
+     
+    // STEP 2: Fallback to global settings
+    if (!$show) {
+        $global_enabled = get_field('enable_modal', 'option');
+        $global_pages = get_field('show_on_pages', 'option');
+        
+              if ($global_enabled && is_array($global_pages)) {
+            $global_ids = wp_list_pluck($global_pages, 'ID');
+            if (in_array($post->ID, $global_ids)) {
+                $modal_content = get_field('popup_content', 'option');
+                $modal_add_image = get_field('modal_add_image', 'option');
+                $modal_image = get_field('modal_image', 'option');
+                $modal_button = get_field('modal_button', 'option');
+                $modal_button_color = get_field('modal_button_color', 'option');
+                $mm_image_fit = get_field('modal_mobile_image_fit', 'option');
+                $bg_color = get_field('modal_bg_color', 'option') ?: $bg_color;
+                $overlay_color = get_field('modal_overlay_color', 'option') ?: $overlay_color;
+                $modal_width = get_field('pop_modal_width', 'option') ?: $modal_width;
+                   if ($modal_add_image && $modal_image) {
+        $modal_img_content .= '<img src="' . esc_url($modal_image['url']) . '" class="modal-img" alt="' . esc_attr($modal_image['alt']) . '">';
+    }
+                $show = true;
+            }
         }
     }
 
-    if (!$show || !$modal_content) return;
+    if (!$show || empty($modal_content)) return;
 
  
     ?>
@@ -100,10 +162,16 @@ add_action('wp_footer', function() {
         .custom-modal-content {
             background-color: <?php echo $bg_color; ?>;
         }
+        @media screen and (max-width: 890px) {
+            .custom-modal-content.with-image .modal-image img.modal-img {
+               object-fit: <?php echo $mm_image_fit ; ?>; 
+            }
+             
+        }
       
     </style>
-    <div id="custom-modal" class="custom-modal" style="display:none;">
-        <div class="custom-modal-content modal-width-<?php echo $pop_modal_width ; ?> <?php echo $modal_add_image ? 'with-image' : ''; ?>">
+    <div id="custom-modal" class="custom-modal">
+        <div class="custom-modal-content modal-width-<?php echo $modal_width ; ?> <?php echo $modal_add_image ? 'with-image' : ''; ?>">
             <span class="close-button">&times;</span>
             <?php if ($modal_add_image && $modal_image) : ?>
                 <div class="modal-image">
@@ -114,7 +182,7 @@ add_action('wp_footer', function() {
                 <?php echo $modal_content; ?>
 
                 <?php if ($modal_button) : ?>
-                    <a href="<?php echo esc_url($modal_button['url']); ?>" class="modal-button" target="<?php echo esc_attr($modal_button['target']); ?>">
+                    <a href="<?php echo esc_url($modal_button['url']); ?>" class="modal-button btn btn-<?php echo $modal_button_color ; ?>" target="<?php echo esc_attr($modal_button['target']); ?>">
                         <?php echo esc_html($modal_button['title']); ?>
                     </a>
                 <?php endif; ?> 
@@ -122,30 +190,5 @@ add_action('wp_footer', function() {
         </div>
     </div>
     <?php
-
-  
-
-   
 });
 
-// Add ACF fields
-add_action('wp_footer', function() {
-    global $post;
-    if (!function_exists('get_field')) return;
-    $modal_enable_page = get_field('modal_enable', $post->ID);
-    if ($modal_enable_page) {
-        $target_modal_pages = get_field('target_modal_page');
-        if ($target_modal_pages) {
-            foreach ($target_modal_pages as $target_modal_page) {
-                $title = get_the_title($target_modal_page->ID);
-                $the_modal_content = get_field('the_modal_content', $target_modal_page->ID);
-                ?>
-                <div id="custom-modal" class="custom-modal" style="display:none;">
-                    <a href="#"><?php echo esc_html($title); ?></a>
-                    <span>A custom field from this post: <?php echo esc_html($the_modal_content); ?></span>
-                </div>
-                <?php
-            }
-        }
-    }
-});
