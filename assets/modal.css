@@ -73,6 +73,12 @@ width: 55%;
     justify-content: center;
     align-items: center;
 }
+.close-button span.close-x {
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 .modal-button {
     width: fit-content;
     padding: 10px 25px;
