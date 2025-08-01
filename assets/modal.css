@@ -35,6 +35,12 @@
     display: flex;
 }
 
+.custom-modal-content.with-video .modal-video {
+    width: 60%;
+    height: 100%;
+    display: flex;
+}
+
 .custom-modal-content.with-image .modal-image img.modal-img {
     width: 100%;
     height: auto;
@@ -49,11 +55,19 @@ width: 55%;
     padding: 10px;
 }
 
+.custom-modal-content.with-video .modal-text {
+    width: 40%;
+    margin: auto;
+    padding: 10px;
+}
+
 .custom-modal-content .modal-text {
     width: 90%;
     margin: auto;
     padding: 20px 0;
 }
+
+
 
 #custom-modal span.close-button {
     position: absolute;
@@ -79,6 +93,21 @@ width: 55%;
     top: 38%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+#custom-modal .modal-video {
+    width: 60%;
+}
+
+#custom-modal .pop-video {
+   display: flex;
+}
+
+#custom-modal .pop-video iframe {
+    width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
 }
 .modal-button {
     width: fit-content;

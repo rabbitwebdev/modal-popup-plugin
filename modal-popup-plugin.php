@@ -177,7 +177,7 @@ add_action('wp_footer', function() {
       
     </style>
     <div id="custom-modal" class="custom-modal">
-        <div class="custom-modal-content modal-width-<?php echo $modal_width ; ?> <?php echo $modal_add_image ? 'with-image' : ''; ?>">
+        <div class="custom-modal-content modal-width-<?php echo $modal_width ; ?> <?php echo $modal_add_image ? 'with-image' : ''; ?> <?php echo $pop_add_video ? 'with-video' : ''; ?>">
             <span class="close-button"><span class="close-x">&times;</span></span>
             <?php if ($modal_add_image && $modal_image) : ?>
                 <div class="modal-image">
