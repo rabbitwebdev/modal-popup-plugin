@@ -78,6 +78,7 @@ add_action('wp_footer', function() {
     $modal_img_content = '';
     $modal_button = '';
     $mm_image_fit = '';
+    $popup_video_content = '';
     $bg_color = '#ffffff';
     $overlay_color = 'rgba(0,0,0,0.6)';
     $modal_width = 'md';
@@ -116,11 +117,16 @@ add_action('wp_footer', function() {
          $modal_add_image = get_field('modal_add_image', $modal->ID);
          $mm_image_fit = get_field('modal_mobile_image_fit', $modal->ID);
          $modal_image = get_field('modal_image', $modal->ID);
+         $pop_add_video = get_field('pop_add_video', $modal->ID);
+         $popup_video = get_field('popup_video', $modal->ID);
          $modal_button = get_field('modal_button', $modal->ID);
          $modal_button_color = get_field('modal_button_color', $modal->ID);
         $bg_color = get_field('modal_bg_color', $modal->ID) ?: $bg_color;
         $overlay_color = get_field('modal_overlay_color', $modal->ID) ?: $overlay_color;
         $modal_width = get_field('modal_width', $modal->ID) ?: $modal_width;
+        if ($pop_add_video && $popup_video) {
+            $popup_video_content .= '<h2> video</h2>' ;
+        }
            if ($modal_add_image && $modal_image) {
         $modal_img_content .= '<img src="' . esc_url($modal_image['url']) . '" class="modal-img" alt="' . esc_attr($modal_image['alt']) . '">';
     }
@@ -176,6 +182,11 @@ add_action('wp_footer', function() {
             <?php if ($modal_add_image && $modal_image) : ?>
                 <div class="modal-image">
                     <?php echo $modal_img_content; ?>
+                </div>
+            <?php endif; ?>
+             <?php if ($pop_add_video && $popup_video) : ?>
+                <div class="modal-video">
+                    <?php echo $popup_video_content; ?>
                 </div>
             <?php endif; ?>
             <div class="modal-text">
