@@ -146,3 +146,11 @@ width: 55%;
                 }
     
 }
+
+@media screen and (max-width:660px) {
+    #custom-modal span.close-button {
+        width: 20px;
+        height: 20px;
+        font-size: 19px;
+    }
+}
