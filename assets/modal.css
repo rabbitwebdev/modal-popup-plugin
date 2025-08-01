@@ -54,7 +54,7 @@ width: 55%;
     padding: 20px 0;
 }
 
-.close-button {
+#custom-modal span.close-button {
     position: absolute;
     right: -10px;
     top: -10px;
@@ -73,7 +73,7 @@ width: 55%;
     justify-content: center;
     align-items: center;
 }
-.close-button span.close-x {
+#custom-modal span.close-button span.close-x {
     position: absolute;
     top: 38%;
     left: 50%;
