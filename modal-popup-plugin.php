@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Modal Popup Plugin
  * Description: Creates a customizable modal popup using ACF fields.
- * Version: 3.2
+ * Version: 3.3
  * Author: P York
  */
 
